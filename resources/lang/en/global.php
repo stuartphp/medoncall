@@ -153,6 +153,7 @@ return [
     ],
     'models'=> [
         'dashboard'         => 'Dashboard',
+        'medicines'         =>'Medicines',
         'orders'            => 'Orders',
         'order_items'       => 'Items',
         'user-management'   => 'User Management',

@@ -26,6 +26,7 @@ class Medicine extends Model
         'image',
         'is_active'
     ];
+
     public function ingredients()
     {
         return $this->hasMany(Ingredient::class);

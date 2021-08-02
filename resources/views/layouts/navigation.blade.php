@@ -18,7 +18,11 @@
                             <path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10zm8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3z"/>
                           </svg>
                     </x-nav-link>
-
+                    <x-nav-link :href="route('admin.medicine')" :active="request()->is('admin/medicine')" title="{{ __('global.models.medicines') }}">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                          </svg>
+                    </x-nav-link>
                     @if(session()->has('grant'))
                         @if(count(array_intersect(session()->get('grant'), ['su','users_management_access']))==1)
                         <x-nav-link href="#" :active="request()->is('admin/user-management/*')" :dropdown="true" title="{{ __('global.models.user-management') }}">
@@ -29,7 +33,7 @@
                                 @if (count(array_intersect(session()->get('grant'), ['su','users_access']))==1)
                                 <a href="{{ route('admin.user-management.users') }}">{{ __('global.models.users') }}</a>
                                 @endif
-                                <a href="{{ route('admin.user-management.users') }}">{{ __('global.models.user_addresses') }}</a>
+                                <a href="{{ route('admin.user-management.addresses') }}">{{ __('global.models.user_addresses') }}</a>
                                 @if (count(array_intersect(session()->get('grant'), ['su','roles_access']))==1)
                                 <a href="{{ route('admin.user-management.roles.index') }}">{{ __('global.models.roles') }}</a>
                                 @endif

@@ -24,9 +24,11 @@ Route::middleware(['auth', 'web'])->group(function(){
     Route::prefix('admin')->as('admin.')->group(function () {
         Route::prefix('user-management')->as('user-management.')->group(function () {
             Route::get('users', function(){ return view('admin.user-management.users');})->name('users');
+            Route::get('user-addresses', function(){ return view('admin.user-management.user-addresses');})->name('addresses');
             Route::get('permissions', function(){ return view('admin.user-management.permissions');})->name('permissions');
             Route::resource('roles', \App\Http\Controllers\Admin\UserManagement\RolesController::class);
         });
+        Route::get('medicine', function(){ return view('admin.medicine');})->name('medicine');
         Route::resource('orders', \App\Http\Controllers\Admin\OrdersController::class);
     });
 });

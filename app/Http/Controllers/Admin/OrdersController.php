@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -48,7 +49,13 @@ class OrdersController extends Controller
      */
     public function show($id)
     {
-        //
+        $order = Order::findOrFail($id);
+        if($order->user_id != auth()->id())
+        {
+            abort(404);
+        }
+        $items = OrderItem::where('order_id', $id)->get();
+        return view('order', compact('order', 'items'));
     }
 
     /**
@@ -59,7 +66,12 @@ class OrdersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $order = Order::findOrFail($id);
+        if($order->user_id != auth()->id())
+        {
+            abort(404);
+        }
+        return view('admin.orders.edit', compact('id'));
     }
 
     /**

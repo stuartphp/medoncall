@@ -98,4 +98,21 @@
             </div>
         </div>
     </div>
+    <x-modal-edit maxWidth="2xl" wire:model="confirmingItemEdition">
+        <x-slot name="title">
+            {{ __('global.edit') }}
+        </x-slot>
+        <x-slot name="content">
+            <x-label>{{ __('users_address.delivery_address') }}</x-label>
+            <x-textarea wire:model.defer="item.delivery_address" class="w-full h-36"></x-textarea>
+            <x-label>{{ __('Delivery Cost') }}</x-label>
+            <x-input class="block mt-1 w-full" type="text" wire:model.defer="item.delivery_cost"/>
+            <x-label>{{ __('Is Approved') }}</x-label>
+            <x-checkbox wire:model.defer="item.is_approved"/>
+        </x-slot>
+        <x-slot name="footer">
+            <x-btn-secondary wire:click="$set('confirmingItemEdition', false)">{{ __('global.cancel') }}</x-btn-secondary>
+            <x-button mode="add" wire:click="editItem()">{{ __('global.save') }}</x-button>
+        </x-slot>
+    </x-modal-edit>
 </div>

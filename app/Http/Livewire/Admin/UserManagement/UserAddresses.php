@@ -13,6 +13,18 @@ class UserAddresses extends Component
     public $searchTerm='';
     public $sortAsc = true;
     public $pageSize = 10;
+    protected $listeners = [
+        'showEditForm',];
+    public $item;
+    public $confirmingItemEdition = false;
+    protected function rules()
+    {
+        return [
+            'item.delivery_address'=>'required',
+            'item.delivery_cost' => 'required',
+            'item.is_approved' => 'boolean',
+        ];
+    }
 
     public function updatedSearchTerm()
     {
@@ -34,7 +46,21 @@ class UserAddresses extends Component
     {
         return UserAddress::query();
     }
+    public function showEditForm(UserAddress $item)
+    {
+        $this->resetErrorBag();
+        $this->item = $item;
+        $this->confirmingItemEdition = true;
+    }
 
+    public function editItem()
+    {
+        $this->validate();
+        $this->item->save();
+        $this->confirmingItemEdition = false;
+        $this->primaryKey = '';
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Successfully Updated']);
+    }
     public function render()
     {
         $data = $this->query()

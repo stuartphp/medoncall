@@ -28,6 +28,7 @@ class Medicines extends Component
     public $confirmingItemEdition = false;
     public $selling_price = 0;
     public $state;
+    public $view_state=[];
     protected function rules(){
         return [
             'state.nappi_code'=>'required',
@@ -46,6 +47,19 @@ class Medicines extends Component
             'state.add_on_fee'=>'',
             'state.is_active'=>'boolean',
         ];
+    }
+    public function mount()
+    {
+        $this->state['generic_name']='';
+        $this->state['product_name']='';
+        $this->state['schedule']='';
+        $this->state['category']='';
+        $this->state['dosage_form']='';
+        $this->state['description']='';
+        $this->state['pack_size']='';
+        $this->state['is_active']=0;
+        $this->state['ingredients']=[];
+        //$this->state['generic_name']='';
     }
     public function updatedSearchTerm()
     {
@@ -93,7 +107,7 @@ class Medicines extends Component
     {
         $detail = Medicine::with('ingredients')->findOrFail($id);
         $this->state = $detail->toArray();
-        
+
         $this->selling_price=number_format(($this->state['cost_price']+$this->state['cost_per_unit']+$this->state['dispensing_fee']+$this->state['add_on_fee'])/100, 2);
         $this->confirmingItemView=true;
     }

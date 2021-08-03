@@ -136,6 +136,12 @@ return [
         'saturday'  =>'Saturday',
         'sunday'    =>'Sunday',
     ],
+    'status'=>[
+        1=>'Created',
+        2=>'Confirmed',
+        3=>'Paid',
+        4=>'Dispatched',
+    ],
     'yesno'=>
     [
         0=>'No',

@@ -63,6 +63,7 @@
             <x-button mode="add" wire:click="createItem()">{{ __('global.send') }}</x-button>
         </x-slot>
     </x-modal-general>
+    
     @push('scripts')
     <script>
         function setup() {

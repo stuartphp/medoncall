@@ -19,12 +19,14 @@ class Medicines extends Component
         'showDeleteForm',
         'showCreateForm',
         'showEditForm',
+        'showDetail'
     ];
     public $confirmingItemDeletion = false;
     public $primaryKey;
     public $confirmingItemCreation = false;
-    public $confirmingIngredients = false;
+    public $confirmingItemView = false;
     public $confirmingItemEdition = false;
+    public $selling_price = 0;
     public $state;
     protected function rules(){
         return [
@@ -90,7 +92,10 @@ class Medicines extends Component
     public function showDetail($id)
     {
         $detail = Medicine::with('ingredients')->findOrFail($id);
-        dd($detail);
+        $this->state = $detail->toArray();
+        
+        $this->selling_price=number_format(($this->state['cost_price']+$this->state['cost_per_unit']+$this->state['dispensing_fee']+$this->state['add_on_fee'])/100, 2);
+        $this->confirmingItemView=true;
     }
     public function showDeleteForm($id)
     {

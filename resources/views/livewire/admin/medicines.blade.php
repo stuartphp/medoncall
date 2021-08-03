@@ -117,6 +117,7 @@
             </div>{{ $data->onEachSide(2)->links() }}
         </div>
     </div>
+    @if(count(array_intersect(session()->get('grant'), ['su','medicines_access']))==1)
     <x-confirmation-modal maxWidth="md" wire:model="confirmingItemDeletion">
         <x-slot name="title">{{ __('global.delete') }}</x-slot>
         <x-slot name="content">{{ __('global.confirm_delete') }}</x-slot>
@@ -155,5 +156,17 @@
             <x-button mode="add" wire:click="createItem()">{{ __('global.save') }}</x-button>
         </x-slot>
     </x-modal-add>
-
+    @else
+<x-modal-general maxWidth="3xl" wire:model="confirmingItemView">
+    <x-slot name="title">
+        View
+    </x-slot>
+    <x-slot name="content">
+        @include('admin.medicine_show')
+    </x-slot>
+    <x-slot name="footer">
+        <x-btn-secondary wire:click="$set('confirmingItemView', false)">{{ __('global.cancel') }}</x-btn-secondary>
+    </x-slot>
+</x-modal-general>
+    @endif
 </div>

@@ -70,12 +70,14 @@ class Edit extends Component
         //dd($this->order);
         $t = OrderItem::where('order_id', $this->order_id)->get();
         $amt=0;
+        $item_total=0;
         foreach($t as $j)
         {
             $amt += $j->retail * $j->quantity;
+            $item_total += $j->quantity;
         }
         $total = $amt+$this->delivery_fee;
-        $this->order->total_items = $t->count();
+        $this->order->total_items = $item_total;
         $this->order->total_excl = ($total);
         $this->order->total_due =$total;
         $this->order->save();
@@ -84,5 +86,33 @@ class Edit extends Component
     public function render()
     {
         return view('livewire.admin.orders.edit');
+    }
+    public function increment(OrderItem $item)
+    {
+        $item->quantity++;
+        $item->save();
+        $this->getItems();
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item Updated']);
+    }
+
+    public function decrement(OrderItem $item)
+    {
+        $item->quantity--;
+        if($item->quantity==0)
+        {
+            $item->delete();
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item Deleted']);
+        }else{
+            $item->save();
+            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item Updated']);
+        }
+        $this->getItems();
+    }
+
+    public function remove(OrderItem $item)
+    {
+        $item->delete();
+        $this->getItems();
+        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Item Deleted']);
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 02, 2021 at 07:40 PM
+-- Generation Time: Aug 03, 2021 at 08:05 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.4.16
 
@@ -6479,6 +6479,22 @@ INSERT INTO `ingredients` (`id`, `medicine_id`, `name`, `unit`, `strength`, `cre
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `jobs`
+--
+
+CREATE TABLE `jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attempts` tinyint(3) UNSIGNED NOT NULL,
+  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
+  `available_at` int(10) UNSIGNED NOT NULL,
+  `created_at` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `medicines`
 --
 
@@ -12286,7 +12302,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (11, '2021_08_01_165244_create_ingredients_table', 1),
 (12, '2021_08_02_084914_create_orders_table', 1),
 (13, '2021_08_02_084923_create_order_items_table', 1),
-(14, '2021_08_02_085217_create_user_addresses_table', 1);
+(14, '2021_08_02_085217_create_user_addresses_table', 1),
+(15, '2021_08_03_151637_create_jobs_table', 2),
+(16, '2021_08_03_153808_create_notifications_table', 3),
+(17, '2021_08_03_163214_create_user_invitations_table', 4);
 
 -- --------------------------------------------------------
 
@@ -12309,6 +12328,14 @@ CREATE TABLE `orders` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `order_number`, `user_id`, `delivery_address`, `total_items`, `total_excl`, `total_delivery`, `total_vat`, `total_due`, `status`, `created_at`, `updated_at`) VALUES
+(1, '21/08/nrL7b', 3, '123 boom st\nPretoria\n0084', 4, 82546, 2000, NULL, 82546, 2, '2021-08-03 11:33:48', '2021-08-03 11:58:37'),
+(2, '21/08/D54GT', 3, '123 boom st\nPretoria\n0084', 4, 265996, 2000, NULL, 265996, 1, '2021-08-03 12:24:10', '2021-08-03 12:32:46');
+
 -- --------------------------------------------------------
 
 --
@@ -12317,12 +12344,24 @@ CREATE TABLE `orders` (
 
 CREATE TABLE `order_items` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` bigint(20) UNSIGNED NOT NULL,
   `medicine_id` bigint(20) UNSIGNED NOT NULL,
   `retail` int(10) UNSIGNED NOT NULL,
   `quantity` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `medicine_id`, `retail`, `quantity`, `created_at`, `updated_at`) VALUES
+(2, 1, 3629, 21872, 1, '2021-08-03 11:56:07', '2021-08-03 11:56:07'),
+(3, 1, 3602, 15525, 2, '2021-08-03 11:56:32', '2021-08-03 11:56:47'),
+(4, 1, 95, 27624, 1, '2021-08-03 11:56:44', '2021-08-03 11:56:44'),
+(6, 2, 1218, 50226, 2, '2021-08-03 12:31:58', '2021-08-03 12:32:06'),
+(7, 2, 4, 81772, 2, '2021-08-03 12:32:32', '2021-08-03 12:32:36');
 
 -- --------------------------------------------------------
 
@@ -12471,7 +12510,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('DJMCQU3IulOaUBHGRs0UCEo9Ns5Ep8gLEnzKrrEX', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiT2NCdEF1djBkeFdGVEMzQkV0d2VGb2x1cUNJOVdnYmZZVG5nSmxDRyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9tZWRvbmNhbGwudGVzdCI7fX0=', 1627924417);
+('HDpkzyPubpBcZO0UcvnJ7zwBwtxWYGX5vylEkdif', 3, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiQTJtMWtERXdTZEZ4Vzkxd0JnZVhrcEV3T1FNbjNnQTl2SU04NHlJdiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjk6Imh0dHA6Ly9tZWRvbmNhbGwudGVzdC9wcm9maWxlIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MztzOjU6ImdyYW50IjthOjA6e319', 1628013756);
 
 -- --------------------------------------------------------
 
@@ -12502,7 +12541,10 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `code`, `email`, `email_verified_at`, `password`, `two_factor_secret`, `two_factor_recovery_codes`, `team_id`, `mobile_number`, `remember_token`, `created_at`, `updated_at`) VALUES
 (1, 'Stuart Harrison', 'Rj7U23Serp', 'stuart@itecassist.co.za', '2021-08-02 10:48:09', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, 0, '0826512384', NULL, '2021-08-02 10:48:09', '2021-08-02 10:48:09'),
 (2, 'Admin User', '2', 'admin@demo.com', '2021-08-02 10:48:09', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, 1, '0826512384', NULL, '2021-08-02 10:48:09', '2021-08-02 10:48:09'),
-(3, 'User', '3', 'user@demo.com', '2021-08-02 10:48:09', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, 1, '0826512384', NULL, '2021-08-02 10:48:09', '2021-08-02 10:48:09');
+(3, 'User', '3', 'user@demo.com', '2021-08-02 10:48:09', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, 1, '0826512384', NULL, '2021-08-02 10:48:09', '2021-08-02 10:48:09'),
+(4, 'Blake Mayo', '4Gx7cyzroA', 'qynem@mailinator.com', NULL, '$2y$10$s2GzkwIstUi6XwFFMEOx/uk1NgC3nSLepLayg4G8a2ixzZZSAMhN6', NULL, NULL, NULL, '0821234567', NULL, '2021-08-03 12:41:42', '2021-08-03 12:41:42'),
+(5, 'Alana Merrill', 'ySmTjBkX0H', 'quqesero@mailinator.com', NULL, '$2y$10$HkAxse82yoSJXctbYaGkreZCKR1E84Y3U/blUWrsvsDb8is/b5qWO', NULL, NULL, NULL, '0821234567', NULL, '2021-08-03 12:43:27', '2021-08-03 12:43:27'),
+(6, 'Inga Crane', 'BXmGCu65vd', 'pawu@mailinator.com', NULL, '$2y$10$an73SCFsHjVeo3GFFvsS6urqacWbuNdoIVgfjA459yM4J2fs9CsjO', NULL, NULL, NULL, '0821234567', NULL, '2021-08-03 13:35:32', '2021-08-03 13:35:32');
 
 -- --------------------------------------------------------
 
@@ -12525,7 +12567,36 @@ CREATE TABLE `user_addresses` (
 --
 
 INSERT INTO `user_addresses` (`id`, `user_id`, `delivery_address`, `delivery_cost`, `is_approved`, `created_at`, `updated_at`) VALUES
-(1, 1, '844 Haarhoff St\nRietfontein\nPertoria\n0084', 0, 0, '2021-08-02 10:54:54', '2021-08-02 10:54:54');
+(1, 1, '844 Haarhoff St\nRietfontein\nPertoria\n0084', 0, 1, '2021-08-02 10:54:54', '2021-08-03 11:08:04'),
+(2, 3, '123 boom st\nPretoria\n0084', 2000, 1, '2021-08-03 11:09:49', '2021-08-03 11:09:49');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_invitations`
+--
+
+CREATE TABLE `user_invitations` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `hash` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_invitations`
+--
+
+INSERT INTO `user_invitations` (`id`, `user_id`, `hash`, `name`, `email`, `created_at`, `updated_at`) VALUES
+(1, 3, '7Lev1bdUHaKiC3BRmQ5uSEOjsTWhYr', 'dave', 'dave@ers.com', '2021-08-03 14:47:06', '2021-08-03 14:47:06'),
+(2, 3, 'VRvEawYGJlStnWM0ek1Z3B6KoFfcu8', 'dave', 'dave@ers.com', '2021-08-03 14:55:33', '2021-08-03 14:55:33'),
+(3, 3, 'VGrDPAvQngB9EjkmJFpHc0wqMoYXtN', 'Dave', 'dave@ole.co.za', '2021-08-03 15:03:01', '2021-08-03 15:03:01'),
+(4, 3, 'rP6E4NWvpGKXkF5ix2U8CsVbAhzel0', 'Dave', 'dave@ole.co.za', '2021-08-03 15:57:43', '2021-08-03 15:57:43'),
+(5, 3, 'wratkR1sdqMP9COUAK3lTBm52VNeQ7', 'Dave', 'dave@ole.co.za', '2021-08-03 16:01:17', '2021-08-03 16:01:17'),
+(6, 3, '6Y7ErRciGAawfC4T5t3XpNHjsMd1xV', 'Dave', 'dave@ole.co.za', '2021-08-03 16:02:31', '2021-08-03 16:02:31');
 
 --
 -- Indexes for dumped tables
@@ -12544,6 +12615,13 @@ ALTER TABLE `failed_jobs`
 ALTER TABLE `ingredients`
   ADD PRIMARY KEY (`id`),
   ADD KEY `ingredients_medicine_id_foreign` (`medicine_id`);
+
+--
+-- Indexes for table `jobs`
+--
+ALTER TABLE `jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `jobs_queue_index` (`queue`);
 
 --
 -- Indexes for table `medicines`
@@ -12569,6 +12647,7 @@ ALTER TABLE `orders`
 --
 ALTER TABLE `order_items`
   ADD PRIMARY KEY (`id`),
+  ADD KEY `order_items_orders` (`order_id`),
   ADD KEY `order_items_medicine_id_foreign` (`medicine_id`);
 
 --
@@ -12627,6 +12706,13 @@ ALTER TABLE `user_addresses`
   ADD KEY `user_addresses_user_id_foreign` (`user_id`);
 
 --
+-- Indexes for table `user_invitations`
+--
+ALTER TABLE `user_invitations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_invitations_user_id_foreign` (`user_id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -12643,6 +12729,12 @@ ALTER TABLE `ingredients`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6411;
 
 --
+-- AUTO_INCREMENT for table `jobs`
+--
+ALTER TABLE `jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `medicines`
 --
 ALTER TABLE `medicines`
@@ -12652,19 +12744,19 @@ ALTER TABLE `medicines`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -12682,13 +12774,19 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `user_addresses`
 --
 ALTER TABLE `user_addresses`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `user_invitations`
+--
+ALTER TABLE `user_invitations`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -12698,19 +12796,20 @@ ALTER TABLE `user_addresses`
 -- Constraints for table `ingredients`
 --
 ALTER TABLE `ingredients`
-  ADD CONSTRAINT `ingredients_medicine_id_foreign` FOREIGN KEY (`medicine_id`) REFERENCES `medicines` (`id`);
+  ADD CONSTRAINT `ingredients_medicine_id_foreign` FOREIGN KEY (`medicine_id`) REFERENCES `medicines` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `order_items`
 --
 ALTER TABLE `order_items`
-  ADD CONSTRAINT `order_items_medicine_id_foreign` FOREIGN KEY (`medicine_id`) REFERENCES `medicines` (`id`);
+  ADD CONSTRAINT `order_items_medicine_id_foreign` FOREIGN KEY (`medicine_id`) REFERENCES `medicines` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_items_orders` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `permission_role`
@@ -12730,7 +12829,13 @@ ALTER TABLE `role_user`
 -- Constraints for table `user_addresses`
 --
 ALTER TABLE `user_addresses`
-  ADD CONSTRAINT `user_addresses_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+  ADD CONSTRAINT `user_addresses_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `user_invitations`
+--
+ALTER TABLE `user_invitations`
+  ADD CONSTRAINT `user_invitations_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

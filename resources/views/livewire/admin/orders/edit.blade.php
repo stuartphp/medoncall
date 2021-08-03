@@ -4,13 +4,8 @@
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 Order Edit
             </h2>
-            <div>
-                <a href="#" class="hover:text-indigo-500" title="Edit Address" wire:click='showAddressForm'>
-                Edit Address
-                </a>
-            </div>
             <div>Status: <span class="text-gray-500">{{ __('global.status.'.$status) }}</span></div>
-            <div>R {{ $total_due }}</div>
+            <div><b>Due: </b>R {{ number_format($total_due,2) }}</div>
         </div>
     </header>
     <div class="flex">
@@ -32,6 +27,8 @@
                         Description
                     </th>
                     <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                        Unit</th>
+                    <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                         Quantity</th>
                     <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                 Amount</th>
@@ -45,17 +42,43 @@
                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                         {{ $item->medicine->generic_name}}
                     </td>
+                    <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                        {{ $item->medicine->dosage_form}}({{ $item->medicine->pack_size }})
+                    </td>
 
                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                        {{ $item->quantity }}
+                        <div class="flex items-center">
+                            {{ $item->quantity }}
+                            <div class="ml-2">
+                                <a href="#" class="hover:text-blue-600" wire:click="increment({{ $item->id }})" >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+                                    </svg>
+                                </a>
+                                <a href="#" class="hover:text-red-600" wire:click="decrement({{ $item->id }})">
+                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                   </svg>
+                                </a>
+
+                            </div>
+
+                        </div>
+
                     </td>
 
                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                         {{ number_format($item->retail/100,2) }}
                     </td>
-                    <td
-                        class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200">
-                        <a href="/admin/orders/{{ $item->id }}/edit" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                    <td class="px-2 py-4 whitespace-no-wrap text-right border-b border-gray-200">
+                        <div class="text-right">
+                            <a href="#" class="text-indigo-600 hover:text-red-700" title="Delete" wire:click="remove({{ $item->id }})">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </a>
+                        </div>
+
                     </td>
                 </tr>
                 @empty
@@ -63,7 +86,7 @@
                 @endforelse
             </tbody>
             <tfoot>
-                <tr><td colspan="4" class="text-right px-4 py-2"><x-button mode="add" wire:click="updateOrder()">Update</x-button></tr>
+                <tr><td colspan="5" class="text-right px-4 py-2"><x-button mode="add" wire:click="updateOrder()">Update</x-button></tr>
             </tfoot>
         </table>
     </div>

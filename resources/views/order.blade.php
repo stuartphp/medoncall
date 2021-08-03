@@ -35,16 +35,18 @@
         <table class="w-full table-fixed">
             <thead>
                 <tr>
-                    <th class="w-3/6">Description</th>
+                    <th class="w-2/6 text-left">Description</th>
+                    <th class="w-1/6">Unit</th>
                     <th class="w-1/6">Quantity</th>
                     <th class="w-1/6">Amount</th>
-                    <th class="w-1/6">Total</th>
+                    <th class="w-1/6 text-right">Total</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($items as $item)
                 <tr class="py-4">
                     <td>{{ $item->medicine->generic_name }}</td>
+                    <td class="text-center">{{ $item->medicine->dosage_form}}({{ $item->medicine->pack_size }})</td>
                     <td class="text-center">{{ $item->quantity }}</td>
                     <td class=" text-right mr-1">{{ number_format($item->retail/100,2) }}</td>
                     <td class=" text-right mr-1">{{ number_format(($item->quantity * $item->retail)/100,2) }}</td>
@@ -53,9 +55,18 @@
 
                 @endforelse
             </tbody>
+            @if($order->total_delivery>0)
+            <tfoot>
+                <tr>
+                    <td class="text-right" colspan="4">Delivery Fee</td>
+                    <td class=" text-right mr-1">{{ number_format($order->total_delivery/100,2) }}</td>
+                </tr>
+            </tfoot>
+            @endif
         </table>
 
-        <div class="flex justify-between items-center mb-2 mt-4 border border-t-2">
+
+        <div class="flex justify-between items-center mb-2 mt-4 border border-t-2 py-2 px-2">
           <div class="text-1xl leading-none"><span class="">Total</span>:</div>
           <div class="text-1xl text-right font-medium">R{{ number_format($order->total_due/100,2) }}</div>
         </div>

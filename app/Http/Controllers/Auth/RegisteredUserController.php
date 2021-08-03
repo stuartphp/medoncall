@@ -37,7 +37,8 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'mobile_number' => 'required|regex:/(0)[0-9]{9}/'
+            'mobile_number' => 'required|regex:/(0)[0-9]{9}/',
+            'team_id'=>'required'
         ]);
 
         $user = User::create([
@@ -47,12 +48,11 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'mobile_number' => $request->mobile_number
         ]);
-
+        
         event(new Registered($user));
-
         Auth::login($user);
-
         return redirect(RouteServiceProvider::HOME);
+
     }
     function generateRandomString($length = 10) {
         return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);

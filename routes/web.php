@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'web'])->group(function(){
+Route::middleware(['auth', 'web', 'verified'])->group(function(){
     Route::get('/dashboard',[\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
     Route::get('profile', function(){ return view('admin.profile');})->name('profile');
     Route::get('terms-and-conditions', function(){ return view('terms-and-conditions');})->name('terms');
@@ -28,9 +28,10 @@ Route::middleware(['auth', 'web'])->group(function(){
             Route::get('permissions', function(){ return view('admin.user-management.permissions');})->name('permissions');
             Route::resource('roles', \App\Http\Controllers\Admin\UserManagement\RolesController::class);
         });
-        Route::get('medicine', function(){ return view('admin.medicine');})->name('medicine');
-        Route::resource('orders', \App\Http\Controllers\Admin\OrdersController::class);
+
     });
+    Route::get('medicine', function(){ return view('admin.medicine');})->name('medicine');
+    Route::resource('orders', \App\Http\Controllers\Admin\OrdersController::class);
 });
 
 require __DIR__.'/auth.php';

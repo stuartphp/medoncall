@@ -32,12 +32,9 @@
                     @livewire('admin.profile.update-password')
                 </div>
                 <div x-show="activeTab===3">
-                    @livewire('admin.profile.orders')
-                </div>
-                <div x-show="activeTab===4">
                     <div class="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-2  gap-1">
                         @forelse ($data as $item)
-                            <div class="bg-purple-100 text-purple-600 py-1 px-3 rounded-full text-xs mb-3">{{ $item->name }}</div>
+                            <div class="bg-purple-100 text-purple-600 py-1 px-3 rounded-full text-xs mb-3">{{ $item->code }}</div>
                         @empty
                             No Members
                         @endforelse
@@ -54,16 +51,18 @@
         <x-slot name="content">
             <p class="text-gray-400">Please inform this person of all the rules of this site.</p>
             <x-label>{{ __('Person Name') }}</x-label>
-            <x-input type="text" name="person_name" class="w-full" required/>
+            <x-input type="text" wire:model.defer="person_name" class="w-full" required/>
+            <x-input-error for="person_name"/>
             <x-label>{{ __('Email') }}</x-label>
-            <x-input type="email" name="email" class="w-full" required/>
+            <x-input type="email" wire:model.defer="email" class="w-full" required/>
+            <x-input-error for="email"/>
         </x-slot>
         <x-slot name="footer">
             <x-btn-secondary wire:click="$set('sendInvitation', false)">{{ __('global.cancel') }}</x-btn-secondary>
-            <x-button mode="add" wire:click="createItem()">{{ __('global.send') }}</x-button>
+            <x-button mode="add" wire:click="createInvitation()">{{ __('global.send') }}</x-button>
         </x-slot>
     </x-modal-general>
-    
+
     @push('scripts')
     <script>
         function setup() {
@@ -73,7 +72,6 @@
               "Profile",
               "Address",
               "Password",
-              "Orders",
               "Team",
           ]
         };

@@ -18,6 +18,7 @@ class Orders extends Component
     public function showCreate()
     {
         $adres = UserAddress::where('user_id', auth()->id())->where('is_approved', 1)->get();
+        $this->addresses=[];
         foreach($adres as $a)
         {
             $this->addresses[]=$a;
@@ -59,4 +60,6 @@ class Orders extends Component
 
         return view('livewire.admin.profile.orders', ['data'=>$data]);
     }
+
+    
 }

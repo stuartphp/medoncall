@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use Livewire\Component;
 use App\Models\Medicine;
+use App\Models\Ingredient;
 use Livewire\WithPagination;
 
 class Medicines extends Component
@@ -22,6 +23,7 @@ class Medicines extends Component
     public $confirmingItemDeletion = false;
     public $primaryKey;
     public $confirmingItemCreation = false;
+    public $confirmingIngredients = false;
     public $confirmingItemEdition = false;
     public $state;
     protected function rules(){
@@ -83,6 +85,7 @@ class Medicines extends Component
             ->paginate($this->pageSize);
         return view('livewire.admin.medicines', ['data'=>$data]);
     }
+
 
     public function showDetail($id)
     {

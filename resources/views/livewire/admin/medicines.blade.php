@@ -99,7 +99,6 @@
                                     <td class="px-6 py-4 text-sm font-medium leading-5 whitespace-no-wrap border-b border-gray-200">
                                         <div class="flex justify-end">
                                             @if(count(array_intersect(session()->get('grant'), ['su','medicines_access']))==1)
-                                                <x-btn-ingr id="{{ $item->id }}"/>
                                                 <x-btn-edit id="{{ $item->id }}"/>
                                                 <x-btn-delete id="{{ $item->id }}"/>
                                             @else
@@ -156,4 +155,5 @@
             <x-button mode="add" wire:click="createItem()">{{ __('global.save') }}</x-button>
         </x-slot>
     </x-modal-add>
+
 </div>

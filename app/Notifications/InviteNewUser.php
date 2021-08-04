@@ -7,11 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class WelcomeNewUser extends Notification implements ShouldQueue
+class InviteNewUser extends Notification implements ShouldQueue
 {
     use Queueable;
-    private $prospect;
-
+    public $prospect;
     /**
      * Create a new notification instance.
      *
@@ -41,9 +40,8 @@ class WelcomeNewUser extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        $url = url('/register'.'?hash='.$this->prospect->hash);
-
-        return (new MailMessage)->markdown('mail.welcome_new_user', ['prospect'=>$this->prospect, 'url'=>$url]);
+        $url = url('/register?hash='.$this->prospect->hash);
+        return (new MailMessage)->markdown('mail.invite_new_user', ['prospect'=>$this->prospect, 'url'=>$url]);
     }
 
     /**

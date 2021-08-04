@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'web', 'verified'])->group(function(){
+Route::middleware(['auth', 'web'])->group(function(){
     Route::get('/dashboard',[\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
     Route::get('profile', function(){ return view('admin.profile');})->name('profile');
     Route::get('terms-and-conditions', function(){ return view('terms-and-conditions');})->name('terms');

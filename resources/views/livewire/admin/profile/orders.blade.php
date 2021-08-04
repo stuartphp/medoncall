@@ -1,9 +1,26 @@
 <div class="flex flex-col">
     <header class="px-4 py-4 bg-white rounded-b-lg shadow">
+
         <div class="flex flex-col justify-between px-4 sm:flex-row">
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
+            <div class="flex">
+<h2 class="text-xl font-semibold leading-tight text-gray-800 mr-6">
                 Orders
             </h2>
+            <div class="inline-block relative py-1 text-md">
+                <div class="absolute inset-0 text-green-200 flex">
+                    <svg height="100%" viewBox="0 0 50 100">
+                        <path
+                            d="M49.9,0a17.1,17.1,0,0,0-12,5L5,37.9A17,17,0,0,0,5,62L37.9,94.9a17.1,17.1,0,0,0,12,5ZM25.4,59.4a9.5,9.5,0,1,1,9.5-9.5A9.5,9.5,0,0,1,25.4,59.4Z"
+                            fill="currentColor" />
+                    </svg>
+                    <div class="flex-grow h-full -ml-px bg-green-200 rounded-md rounded-l-none"></div>
+                </div>
+                <span class="relative text-green-500 uppercase font-semibold pr-px">
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>R{{ number_format(auth()->user()->team->earnings/100,2) }}<span>&nbsp;</span>
+                </span>
+            </div>
+        </div>
+
             <div><a href="#" wire:click="showCreate" >Create</a></div>
         </div>
     </header>
@@ -35,19 +52,19 @@
                 <tbody class="bg-white">
                     @forelse ($data as $item)
                     <tr>
-                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm border-b border-gray-200">
                             {{ $item->order_number }}
                         </td>
 
-                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm border-b border-gray-200">
                             {{ $item->total_items }}
                         </td>
 
-                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                        <td class="px-6 py-4 whitespace-no-wrap text-sm border-b border-gray-200">
                             {{ number_format($item->total_due/100,2) }}
                         </td>
                         <td
-                            class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                            class="px-6 py-4 whitespace-no-wrap text-sm border-b border-gray-200">
                             {{ __('global.status.'.$item->status) }}
                         </td>
 
@@ -68,7 +85,7 @@
                                 @endif
                             </div>
 
-                                @elseif ($item->status < 3)
+                                @elseif ($item->status >1)
                                 <a href="/orders/{{ $item->id }}" class="text-indigo-600 hover:text-indigo-900" target="_blank" title="View"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                   </svg></a>

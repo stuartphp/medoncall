@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\TeamEarning;
 use App\Models\User;
 use App\Models\UserInvitation;
 use App\Providers\RouteServiceProvider;
@@ -51,6 +52,11 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
             'mobile_number' => $request->mobile_number,
             'team_id'=>$team->user_id
+        ]);
+        // Create Earnings Account
+        TeamEarning::create([
+            'user_id'=>$user->id,
+            'earnings'=>0
         ]);
         $team->delete();
 

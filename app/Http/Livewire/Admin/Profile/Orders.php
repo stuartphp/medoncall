@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire\Admin\Profile;
 
+use App\Mail\OrderPlaced;
 use App\Models\Order;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\UserAddress;
-use App\Notifications\OrderCreated;
+use Illuminate\Support\Facades\Mail;
 
 class Orders extends Component
 {
@@ -53,7 +54,8 @@ class Orders extends Component
     {
         $order->status=2;
         $order->save();
-        auth()->user()->notify(new OrderCreated($order));
+        //auth()->user()->notify(new OrderCreated($order));
+        Mail::to(auth()->user()->email)->send(new OrderPlaced($order));
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Order Placed']);
     }
     public function render()

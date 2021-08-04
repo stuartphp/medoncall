@@ -28,6 +28,9 @@ Route::middleware(['auth', 'web'])->group(function(){
             Route::get('permissions', function(){ return view('admin.user-management.permissions');})->name('permissions');
             Route::resource('roles', \App\Http\Controllers\Admin\UserManagement\RolesController::class);
         });
+        Route::prefix('manage-orders')->as('manage-orders.')->group(function () {
+            Route::get('list', function(){ return view('admin.manage-orders.list');})->name('list');
+        });
 
     });
     Route::get('medicine', function(){ return view('admin.medicine');})->name('medicine');

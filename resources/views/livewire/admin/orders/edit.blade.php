@@ -60,13 +60,9 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                    </svg>
                                 </a>
-
                             </div>
-
                         </div>
-
                     </td>
-
                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                         {{ number_format($item->retail/100,2) }}
                     </td>
@@ -78,15 +74,26 @@
                             </svg>
                         </a>
                         </div>
-
                     </td>
                 </tr>
                 @empty
-                    <tr><td colspan="6" class="py-2 px-4">{{ __('global.no_results') }}</td></tr>
+                    <tr><td colspan="5" class="py-2 px-4">{{ __('global.no_results') }}</td></tr>
                 @endforelse
             </tbody>
             <tfoot>
-                <tr><td colspan="5" class="text-right px-4 py-2"><x-button mode="add" wire:click="updateOrder()">Update</x-button></tr>
+                <tr>
+                    <td colspan="4" class="text-right px-4 py-2">
+                        @if (auth()->user()->team->earnings > 0)
+                        <label for="credit" class="inline-flex items-center">
+                            <input id="credit" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" wire:model="applyCredit">
+                            <span class="ml-2 text-sm text-gray-600">Use your credit of ({{ number_format(auth()->user()->team->earnings/100,2) }})</span>
+                        </label>
+                        @endif
+                    </td>
+                    <td class="text-right px-4 py-2">
+                        <x-button mode="add" wire:click="updateOrder()">Update</x-button>
+                    </td>
+                </tr>
             </tfoot>
         </table>
     </div>

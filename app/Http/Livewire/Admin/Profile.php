@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Mail\InviteNewUser as MailInviteNewUser;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
 use App\Models\UserInvitation;
-use App\Notifications\InviteNewUser;
+use Illuminate\Support\Facades\Mail;
 
 class Profile extends Component
 {
@@ -37,7 +38,8 @@ class Profile extends Component
        ]);
        $this->sendInvitation=false;
 
-       auth()->user()->notify(new InviteNewUser($prospect));
+       //auth()->user()->notify(new InviteNewUser($prospect));
+       Mail::to($this->email)->send(new MailInviteNewUser($prospect));
 
        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Invitation was send']);
        $this->person_name='';

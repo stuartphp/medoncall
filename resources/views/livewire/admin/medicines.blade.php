@@ -165,7 +165,7 @@
         @include('admin.medicine_show')
     </x-slot>
     <x-slot name="footer">
-        <x-btn-secondary wire:click="$set('confirmingItemView', false)">{{ __('global.cancel') }}</x-btn-secondary>
+        <x-btn-secondary wire:click="$set('confirmingItemView', false)">Close</x-btn-secondary>
     </x-slot>
 </x-modal-general>
     @endif

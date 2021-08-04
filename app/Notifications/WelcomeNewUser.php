@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class WelcomeNewUser extends Notification
+class WelcomeNewUser extends Notification implements ShouldQueue
 {
     use Queueable;
     private $prospect;
@@ -41,7 +41,8 @@ class WelcomeNewUser extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('/register//'.$this->prospect->hash);
+        $url = url('/register'.'?hash='.$this->prospect->hash);
+
         return (new MailMessage)->markdown('mail.welcome_new_user', ['prospect'=>$this->prospect, 'url'=>$url]);
     }
 

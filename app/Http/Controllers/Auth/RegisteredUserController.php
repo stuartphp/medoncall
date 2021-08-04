@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserInvitation;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -41,14 +42,18 @@ class RegisteredUserController extends Controller
             'team_id'=>'required'
         ]);
 
+        $team = UserInvitation::where('hash', $request->team_id)->first();
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'code'  => $this->generateRandomString(10),
             'password' => Hash::make($request->password),
-            'mobile_number' => $request->mobile_number
+            'mobile_number' => $request->mobile_number,
+            'team_id'=>$team->user_id
         ]);
-        
+        $team->delete();
+
         event(new Registered($user));
         Auth::login($user);
         return redirect(RouteServiceProvider::HOME);

@@ -39,6 +39,9 @@ class Profile extends Component
        $this->sendInvitation=false;
        Notification::send(auth()->user(), new WelcomeNewUser($prospect));
        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Invitation was send']);
+       $this->person_name='';
+       $this->email='';
+       $this->resetErrorBag();
     }
     function generateRandomString($length = 10) {
         return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);

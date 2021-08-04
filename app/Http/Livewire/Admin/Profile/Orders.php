@@ -6,6 +6,7 @@ use App\Models\Order;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\UserAddress;
+use App\Notifications\OrderCreated;
 
 class Orders extends Component
 {
@@ -42,7 +43,7 @@ class Orders extends Component
             'total_due'=>null,
             'status'=>1
         ]);
-        return redirect('admin/orders/'.$or->id.'/edit');
+        return redirect('orders/'.$or->id.'/edit');
     }
     function generateRandomString($length = 10) {
         return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
@@ -52,6 +53,7 @@ class Orders extends Component
     {
         $order->status=2;
         $order->save();
+        auth()->user()->notify(new OrderCreated($order));
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Order Placed']);
     }
     public function render()
@@ -61,5 +63,5 @@ class Orders extends Component
         return view('livewire.admin.profile.orders', ['data'=>$data]);
     }
 
-    
+
 }

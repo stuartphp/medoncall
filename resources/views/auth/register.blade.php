@@ -10,7 +10,7 @@
         <x-auth-validation-errors class="mb-4" :errors="$errors" />-->
 
         <form method="POST" action="{{ route('register') }}">
-            <input type="hidden" name="team_id" value="<?php echo $_GET['hash'];?>"/>
+            <input type="hidden" name="team_id" value="<?php if(isset($_REQUEST['hash'])){echo $_REQUEST['hash'];}?>"/>
             @csrf
             <!-- Name -->
            @error('team_id')

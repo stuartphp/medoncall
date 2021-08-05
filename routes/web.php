@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    //return view('welcome');
-    $data['items'] = App\Models\Medicine::paginate(10);
-    $data['headers'] = ['Schedule', 'Product Name', 'Dosage Form', 'Price', ['name'=>'Action', 'align'=>'right']];
-    return view('test', $data);
+    return view('welcome');
+    // $data['items'] = App\Models\Medicine::paginate(10);
+    // $data['headers'] = [['name'=>'Schedule', 'sortable'=>'schedule'], 'Product Name', 'Dosage Form', 'Price', ['name'=>'Action', 'align'=>'right']];
+    // return view('test', $data);
 });
 
 Route::middleware(['auth', 'web'])->group(function(){

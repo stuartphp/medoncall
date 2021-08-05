@@ -2,7 +2,7 @@
     <header class="px-4 py-4 bg-white rounded-b-lg shadow">
         <div class="flex flex-col justify-between px-4 sm:flex-row">
             <div class="flex">
-<h2 class="text-xl font-semibold leading-tight text-gray-800 mr-6">
+            <h2 class="text-xl font-semibold leading-tight text-gray-800 mr-6">
                 Orders
             </h2>
             @if($earnings>0)

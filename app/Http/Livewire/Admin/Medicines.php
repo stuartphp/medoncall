@@ -89,7 +89,7 @@ class Medicines extends Component
     }
     public function render()
     {
-        $data = $this->query()
+        $data['items'] = $this->query()
             ->when($this->catagory, function($q){
                 $q->where('category', $this->catagory);
             })
@@ -99,7 +99,13 @@ class Medicines extends Component
             })
             ->orderBy($this->sortBy, $this->sortAsc ? 'ASC' : 'DESC')
             ->paginate($this->pageSize);
-        return view('livewire.admin.medicines', ['data'=>$data]);
+        $data['headers'] = [
+            ['name'=>'Schedule', 'sortable'=>'schedule'],
+            ['name'=>'Product Name', 'sortable'=>'product_name'],
+            'Dosage Form',
+            'Price',
+            ['name'=>'Action', 'align'=>'right']];
+        return view('livewire.admin.medicines', $data);
     }
 
 

@@ -51,6 +51,7 @@
             </div>
         </div>
     </header>
+
     <div class="mx-auto max-w-7xl">
         <div class="flex flex-col mt-4">
             <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">

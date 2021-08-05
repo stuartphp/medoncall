@@ -25,6 +25,7 @@ class Table extends Component
             return [
                 'name' => $name,
                 'classes' => $this->textAlignClasses($header['align'] ?? 'left'),
+                'sortable'=> $header['sortable'] ?? '',
             ];
         }, $headers);
     }
@@ -43,4 +44,5 @@ class Table extends Component
     {
         return view('components.table.table');
     }
+
 }

@@ -20,8 +20,8 @@ Your order was created, please make a payment to:
     <td>{{ $order->order_number }}</td>
 </tr>
 </table>
-
-For faster actions please mail proof of payment to paymnets@ravim.co.za with your order number.
+<br>
+For faster rocessing please mail proof of payment to paymenets@ravim.co.za with your order number.
 
 @component('mail::button', ['url' => $url])
 View Order

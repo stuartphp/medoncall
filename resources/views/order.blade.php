@@ -9,10 +9,10 @@
 </head>
 <body>
     <div class="mx-auto p-16" style="max-width: 800px;">
-        <div class="flex items-center justify-between mb-8 px-3">
+        <div class="flex items-center justify-between mb-2 px-3">
           <div>
             <span class="text-2xl">#</span>: {{ $order->order_number }}<br />
-            <span>Date</span>:  {{ $order->updated_at }}<br />
+            <span>Date</span>:  {{ date('Y-m-d', strtotime($order->updated_at)) }}<br />
           </div>
           <div class="text-right">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -27,6 +27,11 @@
             {!! nl2br($order->delivery_address) !!}
           </div>
           <div class="text-right">
+                  <div class="text-2xl">{{ __('global.status.'.$order->status) }}</div><br>
+                @if ($order->status < 3)
+                <div>Valid Until {{ date('Y-m-d', strtotime('+7 day', strtotime($order->created_at)) )}}</div>
+                @endif
+
 
           </div>
         </div>
@@ -55,19 +60,27 @@
 
                 @endforelse
             </tbody>
-            @if($order->total_delivery>0)
+
             <tfoot>
-                <tr>
-                    <td class="text-right" colspan="4">Delivery Fee</td>
-                    <td class=" text-right mr-1">{{ number_format($order->total_delivery/100,2) }}</td>
-                </tr>
+                @if($order->total_delivery>0)
+                    <tr>
+                        <td class="text-right" colspan="4">Delivery Fee</td>
+                        <td class=" text-right mr-1">{{ number_format($order->total_delivery/100,2) }}</td>
+                    </tr>
+                @endif
+                @if($order->total_discount>0)
+                    <tr>
+                        <td class="text-right" colspan="4">Credit</td>
+                        <td class=" text-right mr-1">-{{ number_format($order->total_discount/100,2) }}</td>
+                    </tr>
+                @endif
             </tfoot>
-            @endif
+
         </table>
 
 
         <div class="flex justify-between items-center mb-2 mt-4 border border-t-2 py-2 px-2">
-          <div class="text-1xl leading-none"><span class="">Total</span>:</div>
+          <div class="text-1xl leading-none"><span class="">Total Due:</span>:</div>
           <div class="text-1xl text-right font-medium">R{{ number_format($order->total_due/100,2) }}</div>
         </div>
 

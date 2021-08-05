@@ -9,6 +9,7 @@ use App\Models\Medicine;
 
 class Edit extends Component
 {
+
     public $total_due=0;
     public $status=1;
     public $items;
@@ -20,10 +21,12 @@ class Edit extends Component
     public $current_items;
     public $searchTerm;
 
+
     public function mount($id)
     {
         $this->order_id = $id;
         $this->order = Order::findOrFail($id);
+
         $this->delivery_fee=$this->order->total_delivery;
         $this->order_items = $this->getItems();
         $this->items = Medicine::where('generic_name', 'like', '%a%')
@@ -39,6 +42,8 @@ class Edit extends Component
             ->orderBy('generic_name')
             ->limit(10)->get();
     }
+
+
 
     public function updatedSelected($med)
     {
@@ -76,13 +81,15 @@ class Edit extends Component
             $amt += $j->retail * $j->quantity;
             $item_total += $j->quantity;
         }
+        $amt = $amt - $this->order->total_discount;
         $total = $amt+$this->delivery_fee;
         $this->order->total_items = $item_total;
-        $this->order->total_excl = ($total);
         $this->order->total_due =$total;
         $this->order->save();
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Order Updated']);
     }
+
+
     public function render()
     {
         return view('livewire.admin.orders.edit');

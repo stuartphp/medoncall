@@ -13,7 +13,7 @@ class Order extends Model
         'user_id',
         'delivery_address',
         'total_items',
-        'total_excl',
+        'total_discount',
         'total_delivery',
         'total_vat',
         'total_due',

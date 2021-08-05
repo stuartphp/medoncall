@@ -83,12 +83,7 @@
             <tfoot>
                 <tr>
                     <td colspan="4" class="text-right px-4 py-2">
-                        @if (auth()->user()->team->earnings > 0)
-                        <label for="credit" class="inline-flex items-center">
-                            <input id="credit" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" wire:model="applyCredit">
-                            <span class="ml-2 text-sm text-gray-600">Use your credit of ({{ number_format(auth()->user()->team->earnings/100,2) }})</span>
-                        </label>
-                        @endif
+                        
                     </td>
                     <td class="text-right px-4 py-2">
                         <x-button mode="add" wire:click="updateOrder()">Update</x-button>

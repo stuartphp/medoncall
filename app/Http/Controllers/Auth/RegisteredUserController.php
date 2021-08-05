@@ -35,6 +35,12 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
+        $team = UserInvitation::where('hash', $request->team_id)->first();
+        if($team->email != $request->email)
+        {
+            return redirect('/');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -42,8 +48,6 @@ class RegisteredUserController extends Controller
             'mobile_number' => 'required|regex:/(0)[0-9]{9}/',
             'team_id'=>'required'
         ]);
-
-        $team = UserInvitation::where('hash', $request->team_id)->first();
 
         $user = User::create([
             'name' => $request->name,

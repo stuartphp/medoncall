@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Profile;
 
 use App\Mail\OrderPlaced;
 use App\Models\Order;
+use App\Models\TeamEarning;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\UserAddress;
@@ -16,6 +17,12 @@ class Orders extends Component
     public $confirmCreate=false;
     public $addresses=[];
     public $item;
+    public $earnings=0;
+
+    public function mount()
+    {
+        $this->earnings = auth()->user()->team->earnings;
+    }
 
     public function showCreate()
     {
@@ -50,11 +57,19 @@ class Orders extends Component
         return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
     }
 
-    public function confirmOrder(Order $order)
+    public function confirmOrder(Order $order, $val=false)
     {
+        if($val==true)
+        {
+            $total_due = $order->total_due;
+            $order->total_discount = auth()->user()->team->earnings;
+            $order->total_due = ($total_due - $order->total_discount);
+            TeamEarning::where('user_id', auth()->id())->update(['earnings'=>0]);
+            $this->earnings=0;
+        }
         $order->status=2;
         $order->save();
-        //auth()->user()->notify(new OrderCreated($order));
+
         Mail::to(auth()->user()->email)->send(new OrderPlaced($order));
         $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'Order Placed']);
     }
